@@ -32,10 +32,10 @@ export class UserRepository {
       throw new UserNotFoundException();
     }
   }
-  async update(user: User): Promise<User> {
+  async update(id: string, user: User): Promise<User> {
     return await this.prisma.user.update({
       where: {
-        id: user.id,
+        id,
       },
       data: user,
     });
