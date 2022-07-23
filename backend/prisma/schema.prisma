@@ -11,16 +11,16 @@ datasource db {
 }
 
 model User {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  email   String   @unique
-  firstName    String?
-  lastName String?
-  nickName String?
-  password String?
-  role    Role     @default(USER)
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  email     String  @unique
+  firstName String?
+  lastName  String?
+  nickName  String?
+  password  String?
+  role      Role    @default(USER)
 }
 
-enum Role{
+enum Role {
   USER
   ADMIN
 }
