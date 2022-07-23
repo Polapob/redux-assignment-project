@@ -16,7 +16,7 @@ model User {
   firstName String?
   lastName  String?
   nickName  String?
-  password  String?
+  password  String
   role      Role    @default(USER)
 }
 
