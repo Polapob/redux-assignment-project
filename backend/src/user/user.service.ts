@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { CreateUserDTO } from './dto/createUser.dto';
 import { UserRepository } from './user.repository';
@@ -11,11 +11,15 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async findOne(id: string): Promise<User> {
+    if (!ObjectId.isValid(id)) {
+      throw new HttpException('Invalid ID Type', HttpStatus.BAD_REQUEST);
+    }
     return await this.userRepository.findOne(id);
   }
   async create(createUserDTO: CreateUserDTO): Promise<User> {
     const { password, ...userDto } = createUserDTO;
-    const hashPassword = await bcrypt.hash(password, process.env.SALTORROUND);
+    const salt = await bcrypt.genSalt(parseInt(process.env.SALTORROUND));
+    const hashPassword = await bcrypt.hash(password, salt);
     return await this.userRepository.create({
       ...userDto,
       id: new ObjectId().toString(),
@@ -23,6 +27,9 @@ export class UserService {
     });
   }
   async update(id: string, updateUserDTO: UpdateUserDTO): Promise<User> {
+    if (!ObjectId.isValid(id)) {
+      throw new HttpException('Invalid ID Type', HttpStatus.BAD_REQUEST);
+    }
     const getUser = await this.userRepository.findOne(id);
     return await this.userRepository.update(id, {
       id,
@@ -35,6 +42,9 @@ export class UserService {
     });
   }
   async delete(id: string): Promise<void> {
+    if (!ObjectId.isValid(id)) {
+      throw new HttpException('Invalid ID Type', HttpStatus.BAD_REQUEST);
+    }
     return await this.userRepository.delete(id);
   }
 }
