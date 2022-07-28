@@ -17,12 +17,20 @@ export class UserService {
     return await this.userRepository.findOne(id);
   }
   async create(createUserDTO: CreateUserDTO): Promise<User> {
-    const { password, ...userDto } = createUserDTO;
+    const { password, email, ...userDto } = createUserDTO;
+    if (this.userRepository.findByEmail(email)) {
+      throw new HttpException(
+        'This user already created!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const salt = await bcrypt.genSalt(parseInt(process.env.SALTORROUND));
+    console.log(salt);
     const hashPassword = await bcrypt.hash(password, salt);
     return await this.userRepository.create({
       ...userDto,
       id: new ObjectId().toString(),
+      email,
       password: hashPassword,
     });
   }

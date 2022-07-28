@@ -3,7 +3,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RedisCacheModule } from 'src/redis/redis.module';
 import { RedisCacheService } from 'src/redis/redis.service';
+import { AuthController } from './auth.controller';
 import { AuthRepository } from './auth.repository';
+import { AuthService } from './auth.service';
 
 @Module({
   imports: [
@@ -14,6 +16,7 @@ import { AuthRepository } from './auth.repository';
       max: 100,
     }),
   ],
-  providers: [PrismaService, AuthRepository, RedisCacheService],
+  providers: [PrismaService, AuthRepository, RedisCacheService, AuthService],
+  controllers: [AuthController],
 })
 export class AuthModule {}

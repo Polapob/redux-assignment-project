@@ -40,4 +40,11 @@ export class UserRepository {
       data: user,
     });
   }
+  async findByEmail(email: string): Promise<User> {
+    return await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+  }
 }
