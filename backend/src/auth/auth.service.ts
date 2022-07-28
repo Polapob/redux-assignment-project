@@ -41,81 +41,30 @@ export class AuthService {
   async login(userLoginDTO: UserLoginDTO): Promise<{ sessionId: string }> {
     const { email, password } = userLoginDTO;
     const fetchUser = await this.authRepository.findByEmail(email);
-
     if (!fetchUser) {
       throw new EmailNotFoundException();
     }
-
     const validatePassword = await bcrypt.compare(password, fetchUser.password);
-
     if (!validatePassword) {
       throw new PasswordMismatchException();
     }
-
-    const payload = { id: fetchUser.id, email };
-
-    const accessToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '4h',
-    });
-    const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '30d',
-    });
-
     const sessionId = uuidv4();
-    await this.redisCacheService.set(sessionId, { accessToken, refreshToken });
-    //response.cookie('sessionId', sessionId);
-
+    await this.redisCacheService.set(sessionId, { id: fetchUser.id, email });
     return { sessionId };
   }
 
   async logout(): Promise<{ sessionId: string }> {
-    //response.cookie('sessionId', '');
     return { sessionId: '' };
   }
 
-  async validateToken(sessionId: string): Promise<boolean> {
-    const getToken = await this.redisCacheService.get(sessionId);
-
-    if (!getToken) {
-      // throw new InvalidSessionException();
-      return false;
-    }
-
-    const { accessToken, refreshToken } = getToken as Record<
-      'accessToken' | 'refreshToken',
-      string
-    >;
-
-    const verifyRefreshToken = await this.jwtService.verifyAsync(refreshToken);
-
-    if (!verifyRefreshToken) {
-      // throw new InvalidRefreshTokenException();
-      return false;
-    }
-
-    const verifyAccessToken = await this.jwtService.verifyAsync(accessToken);
-
-    if (!verifyAccessToken) {
-      const newAccessToken = await this.jwtService.signAsync(
-        verifyRefreshToken,
-        {
-          expiresIn: '30d',
-        },
-      );
-      await this.redisCacheService.set(sessionId, {
-        refreshToken,
-        accessToken: newAccessToken,
-      });
+  async validate(sessionId: string): Promise<boolean> {
+    const getSession = (await this.redisCacheService.get(sessionId)) as {
+      id: string;
+      email: string;
+    };
+    if (getSession.id) {
       return true;
     }
-    return true;
+    return false;
   }
-
-  //register
-
-  //login
-
-  //logout
-
-  //validateToken
 }
