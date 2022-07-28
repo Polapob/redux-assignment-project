@@ -13,6 +13,15 @@ services:
       - '27017:27017'
     volumes:
       - 'mongo-db:/bitnami/mongodb'
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
+  rcli:
+    image: redis:latest
+    links:
+      - redis
+    command: redis-cli -h redis
 
 volumes:
   mongo-db:
