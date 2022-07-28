@@ -1,9 +1,5 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
-const lightTheme = createTheme({
-  palette: {
-    mode: 'light',
-  },
-});
+const lightTheme = createTheme({});
 
 export default lightTheme;
