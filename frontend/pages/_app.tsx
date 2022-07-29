@@ -6,7 +6,7 @@ import createEmotionCache from "../utility/createEmotionCache";
 import lightTheme from "../styles/theme/theme";
 import "../styles/globals.css";
 import { AppProps } from "next/app";
-import { store } from "../src/store/store";
+import store from "../src/store/store";
 import { Provider } from "react-redux";
 
 const clientSideEmotionCache = createEmotionCache();

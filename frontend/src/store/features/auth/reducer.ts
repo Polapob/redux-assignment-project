@@ -8,11 +8,7 @@ export type ILoginType = {
 };
 
 export const createReducers = () => {
-  const logout = (state: InitialAuthInterface) => {};
-  const login = (state: InitialAuthInterface, action: ILoginType) => {};
-  return {
-    logout,
-  };
+  return {};
 };
 
 export const createExtraReducers = <T>() => {

@@ -7,6 +7,6 @@ const name = "auth";
 const reducers = createReducers();
 const extraActions = createExtraActions();
 const extraReducers = createExtraReducers<InitialAuthInterface>();
-const slice = createSlice({ name, initialState, reducers: {}, extraReducers });
+const slice = createSlice({ name, initialState, reducers, extraReducers });
 
 export default slice.reducer;
