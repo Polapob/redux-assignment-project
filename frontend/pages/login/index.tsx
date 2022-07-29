@@ -1,5 +1,6 @@
 import { Stack, Typography, OutlinedInput, Button, FormControl, FormHelperText } from "@mui/material";
 import { Box } from "@mui/system";
+import Link from "next/link";
 import { useCallback, FormEventHandler, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -31,7 +32,7 @@ const LoginPage = () => {
   const postLogin = useCallback(
     async (loginBody: LoginBodyTypes) => {
       try {
-        const response = await dispatch(handleLoginPost(loginBody)).unwrap();
+        await dispatch(handleLoginPost(loginBody)).unwrap();
       } catch (err) {
         console.log(err);
       }
@@ -46,7 +47,7 @@ const LoginPage = () => {
   }, [handleSubmit, postLogin]);
 
   return (
-    <Stack sx={{ background: "white", minHeight: "100vh", display: "flex", justifyContent: "start", alignItems: "center" }}>
+    <Stack sx={{ background: "white", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Typography sx={{ color: "black", fontSize: "2rem", textAlign: "center", margin: "2rem 0rem" }}>Login Page</Typography>
       <Box component="form" sx={{ width: "50%", rowGap: "0.5rem", display: "flex", flexDirection: "column" }} onSubmit={onSubmit}>
         <Typography sx={{ color: "black", fontSize: "1.25rem", fontWeight: "700" }}>Email</Typography>
@@ -76,6 +77,17 @@ const LoginPage = () => {
         <Button type="submit" variant="contained" sx={{ margin: "2rem 0rem" }}>
           Submit
         </Button>
+        <Typography component="span" sx={{ color: "black", fontSize: "1.25rem", fontWeight: "700", textAlign: "center" }}>
+          If you doesn&apos;t have an account{" "}
+          <Link href="/register">
+            <Typography
+              component="span"
+              sx={{ textDecoration: "underline", display: "inline-block", margin: "0rem 0.5rem", color: "#FF9966", fontWeight: "700", fontSize: "1.25rem" }}
+            >
+              Register here
+            </Typography>
+          </Link>
+        </Typography>
       </Box>
     </Stack>
   );
