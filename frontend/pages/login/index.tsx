@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, FormEventHandler, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import FormInputField from "../../src/components/common/FormInputField";
 import { handleLoginPost } from "../../src/store/features/auth/thunk";
 import { RootState, useAppDispatch } from "../../src/store/store";
 
@@ -50,32 +51,31 @@ const LoginPage = () => {
     <Stack sx={{ background: "white", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Typography sx={{ color: "black", fontSize: "2rem", textAlign: "center", margin: "2rem 0rem" }}>Login Page</Typography>
       <Box component="form" sx={{ width: "50%", rowGap: "0.5rem", display: "flex", flexDirection: "column" }} onSubmit={onSubmit}>
-        <Typography sx={{ color: "black", fontSize: "1.25rem", fontWeight: "700" }}>Email</Typography>
-        <FormControl>
-          <OutlinedInput
-            error={!!errors.email?.message}
-            autoComplete="off"
-            {...register("email", {
+        <FormInputField
+          title="Email"
+          formRegisterReturn={{
+            ...register("email", {
               required: "email is required field",
               pattern: { value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, message: "Invalid email address!" },
-            })}
-          />
-          <FormHelperText sx={{ width: "100%", margin: "0px", color: "red" }}>{errors.email?.message}</FormHelperText>
-        </FormControl>
-        <Typography sx={{ color: "black", fontSize: "1.25rem", fontWeight: "700" }}>Password</Typography>
-        <FormControl sx={{}}>
-          <OutlinedInput
-            type="password"
-            error={!!errors.password?.message}
-            autoComplete="off"
-            {...register("password", {
+            }),
+          }}
+          errorMessage={errors.email?.message}
+          autoComplete="off"
+          isError={!!errors.email?.message}
+        />
+        <FormInputField
+          title="Password"
+          formRegisterReturn={{
+            ...register("password", {
               required: "password is required field",
-            })}
-          />
-          <FormHelperText sx={{ width: "100%", margin: "0px", color: "red" }}>{errors.password?.message}</FormHelperText>
-        </FormControl>
+            }),
+          }}
+          errorMessage={errors.password?.message}
+          autoComplete="off"
+          isError={!!errors.password?.message}
+        />
         <Button type="submit" variant="contained" sx={{ margin: "2rem 0rem" }}>
-          Submit
+          Login
         </Button>
         <Typography component="span" sx={{ color: "black", fontSize: "1.25rem", fontWeight: "700", textAlign: "center" }}>
           If you doesn&apos;t have an account{" "}
