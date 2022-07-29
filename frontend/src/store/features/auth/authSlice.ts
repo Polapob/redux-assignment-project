@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { createExtraActions } from "./action";
 import { createExtraReducers, createReducers } from "./reducer";
 import { InitialAuthInterface, initialState } from "./state";
