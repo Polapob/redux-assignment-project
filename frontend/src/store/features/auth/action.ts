@@ -11,7 +11,7 @@ export const loginAction = createAction("auth/login", function prepare(email: st
 });
 
 export const createExtraActions = () => {
-  const baseUrl = `${process.env.REACT_APP_API_URL}/users`;
+  const baseUrl = `${process.env.NEX}/users`;
   const login = () => {};
 
   return {

@@ -1,7 +1,12 @@
 import { Stack, Typography, OutlinedInput, Button, FormControl, FormHelperText } from "@mui/material";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useCallback, FormEventHandler, useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { handleLoginPost } from "../../src/store/features/auth/thunk";
+import { RootState, useAppDispatch } from "../../src/store/store";
+
+export type LoginBodyTypes = Record<"email" | "password", string>;
 
 const LoginPage = () => {
   const {
@@ -14,19 +19,36 @@ const LoginPage = () => {
       password: "",
     },
   });
-  const [loginData, setLoginData] = useState<Record<"email" | "password", string>>({
-    email: "",
-    password: "",
+
+  const dispatch = useAppDispatch();
+
+  const { loading, error, sessionId } = useSelector((state: RootState) => {
+    return state.auth;
   });
+
+  console.log(sessionId);
+
+  const postLogin = useCallback(
+    async (loginBody: LoginBodyTypes) => {
+      try {
+        const response = await dispatch(handleLoginPost(loginBody)).unwrap();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [dispatch]
+  );
+
+  const onSubmit: FormEventHandler<HTMLFormElement> = useMemo(() => {
+    return handleSubmit(async (data) => {
+      await postLogin(data);
+    });
+  }, [handleSubmit, postLogin]);
 
   return (
     <Stack sx={{ background: "white", minHeight: "100vh", display: "flex", justifyContent: "start", alignItems: "center" }}>
       <Typography sx={{ color: "black", fontSize: "2rem", textAlign: "center", margin: "2rem 0rem" }}>Login Page</Typography>
-      <Box
-        component="form"
-        sx={{ width: "50%", rowGap: "0.5rem", display: "flex", flexDirection: "column" }}
-        onSubmit={handleSubmit((data) => setLoginData(data))}
-      >
+      <Box component="form" sx={{ width: "50%", rowGap: "0.5rem", display: "flex", flexDirection: "column" }} onSubmit={onSubmit}>
         <Typography sx={{ color: "black", fontSize: "1.25rem", fontWeight: "700" }}>Email</Typography>
         <FormControl>
           <OutlinedInput
@@ -42,6 +64,7 @@ const LoginPage = () => {
         <Typography sx={{ color: "black", fontSize: "1.25rem", fontWeight: "700" }}>Password</Typography>
         <FormControl sx={{}}>
           <OutlinedInput
+            type="password"
             error={!!errors.password?.message}
             autoComplete="off"
             {...register("password", {
