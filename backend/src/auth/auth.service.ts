@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { CreateUserDTO } from 'src/user/dto/createUser.dto';
 import { AuthRepository } from './auth.repository';
@@ -10,9 +10,6 @@ import { EmailNotFoundException } from './exceptions/emailNotFound.exception';
 import { PasswordMismatchException } from './exceptions/passwordMismastch.exception';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
-import { response } from 'express';
-import { InvalidSessionException } from './exceptions/invalidSession.exception';
-import { InvalidRefreshTokenException } from './exceptions/invalidRefreshToken.exception';
 import { UserAlreadyCreateException } from './exceptions/userAlreadyCreate.exception';
 
 @Injectable()
@@ -24,8 +21,10 @@ export class AuthService {
   ) {}
 
   async register(createUserDTO: CreateUserDTO): Promise<User> {
-    const { password, email, ...userDto } = createUserDTO;
-    if (this.authRepository.findByEmail(email)) {
+    const { password, email, firstName, lastName, nickName, role } =
+      createUserDTO;
+    const findUser = !!(await this.authRepository.findByEmail(email));
+    if (findUser) {
       throw new UserAlreadyCreateException();
     }
     const salt = await bcrypt.genSalt(parseInt(process.env.SALTORROUND));
@@ -33,8 +32,11 @@ export class AuthService {
     return this.authRepository.create({
       id: new ObjectID().toString(),
       email,
+      firstName,
+      lastName,
+      nickName,
+      role,
       password: hashPassword,
-      ...userDto,
     });
   }
 

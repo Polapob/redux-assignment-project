@@ -1,32 +1,25 @@
-import {
-  Body,
-  Controller,
-  HttpStatus,
-  Post,
-  Res,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { ValidationPipe } from 'src/shared/pipes/validation.pipe';
 import { User } from '@prisma/client';
-import { CreateUserDTO } from 'src/user/dto/createUser.dto';
 import { AuthService } from './auth.service';
 import { UserLoginDTO } from './dto/userLogin.dto';
 import { Response } from 'express';
+import { UserRegisterDTO } from './dto/userRegister.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  @UsePipes(new ValidationPipe())
-  async register(@Body() createUserDTO: CreateUserDTO): Promise<User> {
+  async register(
+    @Body(new ValidationPipe()) createUserDTO: UserRegisterDTO,
+  ): Promise<User> {
     return await this.authService.register(createUserDTO);
   }
 
   @Post('login')
-  @UsePipes(new ValidationPipe())
   async login(
-    @Body() userLoginDTO: UserLoginDTO,
+    @Body(new ValidationPipe()) userLoginDTO: UserLoginDTO,
     @Res() response: Response,
   ): Promise<{ sessionId: string }> {
     const { sessionId } = await this.authService.login(userLoginDTO);

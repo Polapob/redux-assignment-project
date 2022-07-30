@@ -6,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  UsePipes,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { UserService } from './user.service';
@@ -23,9 +22,10 @@ export class UserController {
     return await this.userService.findOne(id);
   }
 
-  @UsePipes(new ValidationPipe())
   @Post('create')
-  async create(@Body() userDTO: CreateUserDTO): Promise<User> {
+  async create(
+    @Body(new ValidationPipe()) userDTO: CreateUserDTO,
+  ): Promise<User> {
     return await this.userService.create(userDTO);
   }
 
