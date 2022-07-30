@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { LoginBodyTypes } from "../../../../pages/login";
 import { registerFormPresenter } from "../../../presenter/formPresenter";
-import { handleLoginPost } from "../../../store/features/auth/thunk";
+import handleLoginPost from "../../../store/features/auth/thunk/handleLoginPost";
 import { useAppDispatch, RootState } from "../../../store/store";
 import FormInputField from "../../common/FormInputField";
 
