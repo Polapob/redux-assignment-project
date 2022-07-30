@@ -5,6 +5,7 @@ import { useCallback, FormEventHandler, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { LoginBodyTypes } from "../../../../pages/login";
+import { registerFormPresenter } from "../../../presenter/formPresenter";
 import { handleLoginPost } from "../../../store/features/auth/thunk";
 import { useAppDispatch, RootState } from "../../../store/store";
 import FormInputField from "../../common/FormInputField";
@@ -46,24 +47,22 @@ const LoginForm = () => {
   return (
     <Box component="form" sx={{ width: "50%", rowGap: "0.5rem", display: "flex", flexDirection: "column" }} onSubmit={onSubmit}>
       <FormInputField
+        isRequired
         title="Email"
-        formRegisterReturn={{
-          ...register("email", {
-            required: "email is required field",
-            pattern: { value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, message: "Invalid email address!" },
-          }),
-        }}
+        {...registerFormPresenter("email", register, {
+          required: "email is required field",
+          pattern: { value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, message: "Invalid email address!" },
+        })}
         errorMessage={errors.email?.message}
         autoComplete="off"
         isError={!!errors.email?.message}
       />
       <FormInputField
+        isRequired
         title="Password"
-        formRegisterReturn={{
-          ...register("password", {
-            required: "password is required field",
-          }),
-        }}
+        {...registerFormPresenter("password", register, {
+          required: "password is required field",
+        })}
         errorMessage={errors.password?.message}
         autoComplete="off"
         isError={!!errors.password?.message}
