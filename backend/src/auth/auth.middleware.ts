@@ -1,5 +1,5 @@
-import { Injectable, NestMiddleware, Next, Req, Res } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Injectable, NestMiddleware, Next, Req } from '@nestjs/common';
+import { Request, NextFunction } from 'express';
 import { RedisCacheService } from 'src/redis/redis.service';
 import { UserUnauthorizeException } from './exceptions/userUnauthorized.exception';
 
