@@ -5,8 +5,9 @@ import { useCallback, FormEventHandler, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { LoginBodyTypes } from "../../../../pages/login";
+import useFormSubmit from "../../../hooks/useFormSubmit";
 import { registerFormPresenter } from "../../../presenter/formPresenter";
-import { handleLoginPost } from "../../../store/features/auth/thunk";
+import handleLoginPost from "../../../store/features/auth/thunk/handleLoginPost";
 import { useAppDispatch, RootState } from "../../../store/store";
 import FormInputField from "../../common/FormInputField";
 
@@ -22,27 +23,11 @@ const LoginForm = () => {
     },
   });
 
-  const dispatch = useAppDispatch();
-  const { loading, error, sessionId } = useSelector((state: RootState) => {
+  //const dispatch = useAppDispatch();
+  const [onSubmit] = useFormSubmit({ handleSubmit, formSubmitType: "login" });
+  /* const { loading, error, sessionId } = useSelector((state: RootState) => {
     return state.auth;
-  });
-
-  const postLogin = useCallback(
-    async (loginBody: LoginBodyTypes) => {
-      try {
-        await dispatch(handleLoginPost(loginBody)).unwrap();
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    [dispatch]
-  );
-
-  const onSubmit: FormEventHandler<HTMLFormElement> = useMemo(() => {
-    return handleSubmit(async (data) => {
-      await postLogin(data);
-    });
-  }, [handleSubmit, postLogin]);
+  }); */
 
   return (
     <Box component="form" sx={{ width: "50%", rowGap: "0.5rem", display: "flex", flexDirection: "column" }} onSubmit={onSubmit}>
