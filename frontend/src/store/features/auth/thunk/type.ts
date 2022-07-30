@@ -15,4 +15,5 @@ export type IRegisterType = {
   nickname: string;
   firstname: string;
   lastname: string;
+  role: "USER" | "ADMIN";
 };

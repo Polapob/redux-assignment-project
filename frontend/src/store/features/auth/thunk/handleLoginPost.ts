@@ -14,7 +14,7 @@ const handleLoginPost = createAsyncThunk<
     const response = await apiClient.post("auth/login", postData);
     return response.data;
   } catch (err) {
-    let error = err as AxiosError<ValidationErrors>; // cast the error for access
+    const error = err as AxiosError<ValidationErrors>; // cast the error for access
     if (!error.response?.data) {
       return thunkApi.rejectWithValue({
         statusCode: 500,

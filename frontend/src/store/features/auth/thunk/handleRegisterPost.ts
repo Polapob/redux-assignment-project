@@ -7,10 +7,10 @@ const handleRegisterPost = createAsyncThunk<any, IRegisterType, { rejectValue: V
   "auth/register",
   async (postData: IRegisterType, thunkApi) => {
     try {
-      const response = await apiClient.post("auth/register", { ...postData, role: "USER" });
+      const response = await apiClient.post("auth/register", { ...postData });
       return response.data;
     } catch (err) {
-      let error = err as AxiosError<ValidationErrors>;
+      const error = err as AxiosError<ValidationErrors>;
       if (!error.response?.data) {
         return thunkApi.rejectWithValue({
           statusCode: 500,
