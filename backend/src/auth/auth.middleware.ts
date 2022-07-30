@@ -7,11 +7,7 @@ import { UserUnauthorizeException } from './exceptions/userUnauthorized.exceptio
 export class AuthMiddleware implements NestMiddleware {
   constructor(private readonly redisCacheService: RedisCacheService) {}
 
-  async use(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Next() next: NextFunction,
-  ) {
+  async use(@Req() req: Request, @Next() next: NextFunction) {
     const { sessionId } = req.cookies;
     const sessionData = (await this.redisCacheService.get(sessionId)) as {
       id: string;
