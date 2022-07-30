@@ -30,7 +30,6 @@ export class AuthController {
     @Res() response: Response,
   ): Promise<{ sessionId: string }> {
     const { sessionId } = await this.authService.login(userLoginDTO);
-    console.log(sessionId);
     response.cookie('sessionId', sessionId);
     response.status(HttpStatus.ACCEPTED).json({
       sessionId,

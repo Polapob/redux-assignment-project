@@ -25,7 +25,6 @@ export class UserService {
       );
     }
     const salt = await bcrypt.genSalt(parseInt(process.env.SALTORROUND));
-    console.log(salt);
     const hashPassword = await bcrypt.hash(password, salt);
     return await this.userRepository.create({
       ...userDto,

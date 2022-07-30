@@ -10,8 +10,8 @@ async function bootstrap() {
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
-  await app.listen(process.env.PORT);
   app.use(cookieParser());
+  await app.listen(process.env.PORT);
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
 }
