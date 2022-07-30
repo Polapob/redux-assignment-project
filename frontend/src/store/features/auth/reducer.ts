@@ -2,11 +2,6 @@ import { ActionReducerMapBuilder, createReducer } from "@reduxjs/toolkit";
 import { InitialAuthInterface, initialState, LoadingStatus } from "./state";
 import { handleLoginPost } from "./thunk";
 
-export type ILoginType = {
-  email: string;
-  password: string;
-};
-
 export const createReducers = () => {
   return {};
 };
@@ -18,6 +13,7 @@ export const createExtraReducers = <T>() => {
         return { ...state, error: "", loading: LoadingStatus.FINISH, sessionId: action.payload.sessionId };
       })
       .addCase(handleLoginPost.rejected, (state, action) => {
+        console.log(action);
         return { ...state, error: "error occured!", loading: LoadingStatus.ERROR };
       })
       .addCase(handleLoginPost.pending, (state, action) => {

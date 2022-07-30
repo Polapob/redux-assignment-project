@@ -38,6 +38,7 @@ const RegisterPage = () => {
           />
           <FormInputField
             title="Password"
+            inputType="password"
             isRequired
             autoComplete="off"
             isError={!!errors?.password}

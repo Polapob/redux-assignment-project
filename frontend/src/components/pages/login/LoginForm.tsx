@@ -59,6 +59,7 @@ const LoginForm = () => {
       />
       <FormInputField
         isRequired
+        inputType="password"
         title="Password"
         {...registerFormPresenter("password", register, {
           required: "password is required field",
