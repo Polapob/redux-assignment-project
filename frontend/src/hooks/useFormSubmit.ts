@@ -15,7 +15,7 @@ interface UseFormSubmitInterface {
 
 const useFormSubmit = ({ handleSubmit, formSubmitType }: UseFormSubmitInterface) => {
   const dispatch = useAppDispatch();
-  const postLogin = useCallback(
+  const Form = useCallback(
     async (body: ILoginType | IRegisterType) => {
       try {
         switch (formSubmitType) {
@@ -34,9 +34,9 @@ const useFormSubmit = ({ handleSubmit, formSubmitType }: UseFormSubmitInterface)
 
   const onSubmit: FormEventHandler<HTMLFormElement> = useMemo(() => {
     return handleSubmit(async (data) => {
-      await postLogin(data);
+      await Form(data);
     });
-  }, [handleSubmit, postLogin]);
+  }, [handleSubmit, Form]);
 
   return [onSubmit];
 };

@@ -1,10 +1,12 @@
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm } from "react-hook-form";
-import register from "../../../../pages/register";
 import { registerFormPresenter } from "../../../presenter/formPresenter";
 import FormInputField from "../../common/FormInputField";
 import useFormSubmit from "../../../hooks/useFormSubmit";
+import LoadingModal from "../../common/Modal/LoadingModal";
+import { RootState, useAppSelector } from "../../../store/store";
+import { LoadingStatus } from "../../../store/features/auth/state";
 
 const RegisterForm = () => {
   const {
@@ -15,14 +17,16 @@ const RegisterForm = () => {
     defaultValues: {
       email: "",
       password: "",
-      nickname: "",
-      firstname: "",
-      lastname: "",
+      nickName: "",
+      firstName: "",
+      lastName: "",
       role: "USER",
     },
   });
 
   const [onSubmit] = useFormSubmit({ handleSubmit, formSubmitType: "register" });
+  const { loading, error, sessionId } = useAppSelector((state: RootState) => state.auth);
+  console.log(loading);
   return (
     <Box
       component="form"
@@ -54,27 +58,28 @@ const RegisterForm = () => {
       <FormInputField
         title="Nickname"
         autoComplete="off"
-        isError={!!errors?.nickname}
-        errorMessage={errors.nickname?.message}
-        {...registerFormPresenter("nickname", register, {})}
+        isError={!!errors?.nickName}
+        errorMessage={errors.nickName?.message}
+        {...registerFormPresenter("nickName", register, {})}
       />
       <FormInputField
         title="Firstname"
         autoComplete="off"
-        isError={!!errors?.firstname}
-        errorMessage={errors.firstname?.message}
-        {...registerFormPresenter("firstname", register, {})}
+        isError={!!errors?.firstName}
+        errorMessage={errors.firstName?.message}
+        {...registerFormPresenter("firstName", register, {})}
       />
       <FormInputField
         title="Lastname"
         autoComplete="off"
-        isError={!!errors?.lastname}
-        errorMessage={errors.lastname?.message}
-        {...registerFormPresenter("lastname", register, {})}
+        isError={!!errors?.lastName}
+        errorMessage={errors.lastName?.message}
+        {...registerFormPresenter("lastName", register, {})}
       />
       <Button type="submit" variant="contained" sx={{ margin: "2rem 0rem" }} fullWidth>
         Register
       </Button>
+      <LoadingModal open={loading === LoadingStatus.LOADING} />
     </Box>
   );
 };
