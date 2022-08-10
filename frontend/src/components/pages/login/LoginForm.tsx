@@ -23,12 +23,7 @@ const LoginForm = () => {
     },
   });
 
-  //const dispatch = useAppDispatch();
   const [onSubmit] = useFormSubmit({ handleSubmit, formSubmitType: "login" });
-  /* const { loading, error, sessionId } = useSelector((state: RootState) => {
-    return state.auth;
-  }); */
-
   return (
     <Box component="form" sx={{ width: "50%", rowGap: "0.5rem", display: "flex", flexDirection: "column" }} onSubmit={onSubmit}>
       <FormInputField

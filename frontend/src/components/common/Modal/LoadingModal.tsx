@@ -1,22 +1,17 @@
 import { Box, Modal, ModalProps, Typography, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
+import useModalOpen from "../../../hooks/useModalOpen";
 
 interface ILoadingModalProps extends Omit<ModalProps, "children" | "sx"> {}
 const LoadingModal = ({ open, ...restProps }: ILoadingModalProps) => {
-  const [modalOpen, setModalOpen] = useState<boolean>(open);
-
-  useEffect(() => {
-    setModalOpen(open);
-  }, [open]);
-
+  const [modalOpen, closeModal] = useModalOpen(open);
   return (
     <Modal
       disableAutoFocus
       disableEnforceFocus
+      data-testid="modal-container"
       open={modalOpen}
-      onClose={() => {
-        setModalOpen(false);
-      }}
+      onClose={closeModal}
       {...restProps}
       sx={{
         display: "flex",
@@ -30,6 +25,7 @@ const LoadingModal = ({ open, ...restProps }: ILoadingModalProps) => {
       }}
     >
       <Box
+        data-testid="modal-content"
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -44,7 +40,9 @@ const LoadingModal = ({ open, ...restProps }: ILoadingModalProps) => {
         }}
       >
         <CircularProgress size="120px" />
-        <Typography sx={{ fontWeight: "bold", fontSize: "1.25rem", color: "black" }}>Waiting for server processing.</Typography>
+        <Typography sx={{ fontWeight: "bold", fontSize: "1.25rem", color: "black" }} data-testid="modal-text">
+          Waiting for server processing.
+        </Typography>
       </Box>
     </Modal>
   );

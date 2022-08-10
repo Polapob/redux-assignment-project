@@ -1,6 +1,6 @@
 import { Typography, FormControl, OutlinedInput, FormHelperText } from "@mui/material";
-import React, { useRef } from "react";
-import { UseFormRegister, UseFormRegisterReturn } from "react-hook-form/dist/types";
+import React, { ForwardedRef } from "react";
+import { UseFormRegisterReturn } from "react-hook-form/dist/types";
 
 interface IFormInputFieldProps extends Omit<UseFormRegisterReturn, "ref"> {
   title: string;
@@ -13,7 +13,7 @@ interface IFormInputFieldProps extends Omit<UseFormRegisterReturn, "ref"> {
 
 const FormInputField = (
   { title, isError, autoComplete, errorMessage, isRequired = false, inputType = "text", ...restProps }: IFormInputFieldProps,
-  ref: any
+  ref: ForwardedRef<HTMLInputElement>
 ) => {
   return (
     <>
