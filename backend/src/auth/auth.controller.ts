@@ -13,8 +13,10 @@ export class AuthController {
   @Post('register')
   async register(
     @Body(new ValidationPipe()) createUserDTO: UserRegisterDTO,
-  ): Promise<User> {
-    return await this.authService.register(createUserDTO);
+  ): Promise<Partial<User>> {
+    const registerBody = await this.authService.register(createUserDTO);
+    delete registerBody.password;
+    return registerBody;
   }
 
   @Post('login')
