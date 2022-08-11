@@ -18,6 +18,14 @@ model User {
   nickName  String?
   password  String
   role      Role    @default(USER)
+  
+}
+
+model Item {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  categoryId  String?
 }
 
 enum Role {
