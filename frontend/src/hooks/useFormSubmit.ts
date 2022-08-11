@@ -8,7 +8,7 @@ import { useAppDispatch, RootState } from "../store/store";
 type SupportFormTypes = ILoginType | IRegisterType;
 type FormSubmitTypes = "login" | "register";
 
-interface UseFormSubmitInterface {
+export interface UseFormSubmitInterface {
   handleSubmit: UseFormHandleSubmit<SupportFormTypes>;
   formSubmitType: FormSubmitTypes;
 }

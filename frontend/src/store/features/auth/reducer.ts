@@ -1,5 +1,5 @@
-import { ActionReducerMapBuilder, createReducer } from "@reduxjs/toolkit";
-import { InitialAuthInterface, initialState, LoadingStatus } from "./state";
+import { ActionReducerMapBuilder } from "@reduxjs/toolkit";
+import { LoadingStatus } from "./state";
 import handleLoginPost from "./thunk/handleLoginPost";
 import handleRegisterPost from "./thunk/handleRegisterPost";
 

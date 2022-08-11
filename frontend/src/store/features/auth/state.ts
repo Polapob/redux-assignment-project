@@ -10,7 +10,7 @@ export interface InitialAuthInterface {
   loading: LoadingStatus;
 }
 
-const createInitialState = (): InitialAuthInterface => {
+export const createInitialState = (): InitialAuthInterface => {
   return {
     sessionId: "",
     error: null,
