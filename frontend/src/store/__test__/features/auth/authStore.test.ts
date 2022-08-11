@@ -3,6 +3,8 @@ import apiClient from "../../../../utils/axios";
 import authSlice from "../../../features/auth/authSlice";
 import { LoadingStatus } from "../../../features/auth/state";
 import handleLoginPost from "../../../features/auth/thunk/handleLoginPost";
+import handleRegisterPost from "../../../features/auth/thunk/handleRegisterPost";
+import { ILoginType, IRegisterType } from "../../../features/auth/thunk/type";
 import store from "../../../store";
 
 enum AxiosTypes {
@@ -41,13 +43,14 @@ describe("Auth store redux state test", () => {
     });
   });
 
-  it("handle when network doesn't connect", async () => {
-    mockAxios(AxiosTypes.POST, "auth/login", 500, {
+  it("connection error occurs while user logins", async () => {
+    const mockReturnValue = {
       statusCode: 500,
       error: "Network Error",
       message: "Network Error",
-    });
-    const testBody = { email: "", password: "" };
+    };
+    mockAxios(AxiosTypes.POST, "auth/login", 500, mockReturnValue);
+    const testBody: ILoginType = { email: "", password: "" };
     const { payload } = await store.dispatch(handleLoginPost(testBody));
     expect(payload).toStrictEqual({
       statusCode: 500,
@@ -57,46 +60,67 @@ describe("Auth store redux state test", () => {
   });
 
   it("handle when user's email not found", async () => {
-    mockAxios(AxiosTypes.POST, "auth/login", 404, {
+    const mockReturnValue = {
       statusCode: 404,
       error: "Not Found",
       message: "User's email not found in database.",
-    });
-    const testBody = { email: "test12341@hotmail.com", password: "test12342" };
+    };
+    mockAxios(AxiosTypes.POST, "auth/login", 404, mockReturnValue);
+    const testBody: ILoginType = { email: "test12341@hotmail.com", password: "test12342" };
     const { payload } = await store.dispatch(handleLoginPost(testBody));
-    expect(payload).toStrictEqual({
-      statusCode: 404,
-      error: "Not Found",
-      message: "User's email not found in database.",
-    });
+    expect(payload).toStrictEqual(mockReturnValue);
   });
 
   it("handle when user's in valid password", async () => {
-    mockAxios(AxiosTypes.POST, "auth/login", 400, {
+    const mockReturnValue = {
       statusCode: 400,
       error: "Bad Request",
       message: "Invalid password.",
-    });
-    const testBody = { email: "test12341@hotmail.com", password: "" };
+    };
+    mockAxios(AxiosTypes.POST, "auth/login", 400, mockReturnValue);
+    const testBody: ILoginType = { email: "test12341@hotmail.com", password: "" };
     const { payload } = await store.dispatch(handleLoginPost(testBody));
-    expect(payload).toStrictEqual({
-      statusCode: 400,
-      error: "Bad Request",
-      message: "Invalid password.",
-    });
+    expect(payload).toStrictEqual(mockReturnValue);
   });
 
   it("handle when user's successfully login", async () => {
-    const mockSessionId = "3851ee8a-a7de-46a4-aaa9-f6095dddcd2a";
-    mockAxios(AxiosTypes.POST, "auth/login", 200, { sessionId: mockSessionId });
-    const testBody = { email: "test12341@hotmail.com", password: "" };
+    const sessionId = "3851ee8a-a7de-46a4-aaa9-f6095dddcd2a";
+    const mockReturnValue = { sessionId };
+    mockAxios(AxiosTypes.POST, "auth/login", 200, mockReturnValue);
+    const testBody: ILoginType = { email: "test12341@hotmail.com", password: "" };
     const { payload } = await store.dispatch(handleLoginPost(testBody));
-    expect(payload).toStrictEqual({ sessionId: mockSessionId });
+    expect(payload).toStrictEqual(mockReturnValue);
     const authState = store.getState().auth;
     expect(authState).toStrictEqual({
-      sessionId: mockSessionId,
+      sessionId,
       error: "",
       loading: LoadingStatus.FINISH,
     });
+  });
+
+  it("handle when error.response is undefined", async () => {
+    mockAxios(AxiosTypes.POST, "auth/login", 500, {});
+    const testBody: ILoginType = { email: "", password: "" };
+    const { payload } = await store.dispatch(handleLoginPost(testBody));
+    expect(payload).toStrictEqual({});
+  });
+
+  it("connection error occurs while user registers", async () => {
+    const mockReturnValue = {
+      statusCode: 500,
+      error: "Network Error",
+      message: "Network Error",
+    };
+    mockAxios(AxiosTypes.POST, "auth/register", mockReturnValue.statusCode, mockReturnValue);
+    const testBody: IRegisterType = {
+      email: "",
+      password: "",
+      nickname: "",
+      firstname: "",
+      lastname: "",
+      role: "USER",
+    };
+    const { payload } = await store.dispatch(handleRegisterPost(testBody));
+    expect(payload).toStrictEqual(mockReturnValue);
   });
 });
