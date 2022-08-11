@@ -12,8 +12,8 @@ export type ILoginType = {
 export type IRegisterType = {
   email: string;
   password: string;
-  nickname: string;
-  firstname: string;
-  lastname: string;
+  nickName: string;
+  firstName: string;
+  lastName: string;
   role: "USER" | "ADMIN";
 };
