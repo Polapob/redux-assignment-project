@@ -1,5 +1,5 @@
-import React from "react";
-import { CacheProvider } from "@emotion/react";
+import { useEffect, ReactElement, ReactNode } from "react";
+import { NextPage } from "next";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 
 import createEmotionCache from "../utility/createEmotionCache";
@@ -11,11 +11,19 @@ import { Provider } from "react-redux";
 
 const clientSideEmotionCache = createEmotionCache();
 
-const MyApp = (props: AppProps) => {
-  const { Component, pageProps } = props;
+export type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
 
-  React.useEffect(() => {
-    // Remove the server-side injected CSS.
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+const MyApp = (props: AppPropsWithLayout) => {
+  const { Component, pageProps } = props;
+  const getLayout = Component.getLayout ?? ((page) => page);
+
+  useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
       jssStyles.parentElement!.removeChild(jssStyles);
@@ -26,7 +34,7 @@ const MyApp = (props: AppProps) => {
     <Provider store={store}>
       <ThemeProvider theme={lightTheme}>
         <CssBaseline />
-        <Component {...pageProps} />
+        {getLayout(<Component {...pageProps} />)}
       </ThemeProvider>
     </Provider>
   );

@@ -1,15 +1,25 @@
-import { Stack, Typography, OutlinedInput, Button, FormControl, FormHelperText } from "@mui/material";
+import { Stack, Typography, Box } from "@mui/material";
+import { ReactElement } from "react";
+import LinkTypography from "../../src/components/common/Typography/LinkTypography";
+import FormLayoutWrapper from "../../src/components/layout/FormLayoutWrapper";
 import LoginForm from "../../src/components/pages/login/LoginForm";
 
 export type LoginBodyTypes = Record<"email" | "password", string>;
 
 const LoginPage = () => {
   return (
-    <Stack sx={{ background: "white", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <>
       <Typography sx={{ color: "black", fontSize: "2rem", textAlign: "center", margin: "2rem 0rem", fontWeight: "bold" }}>Login Page</Typography>
       <LoginForm />
-    </Stack>
+      <LinkTypography href="/register" linkText="Register here">
+        If you doesn&apos;t have an account{" "}
+      </LinkTypography>
+    </>
   );
+};
+
+LoginPage.getLayout = (page: ReactElement) => {
+  return <FormLayoutWrapper>{page}</FormLayoutWrapper>;
 };
 
 export default LoginPage;

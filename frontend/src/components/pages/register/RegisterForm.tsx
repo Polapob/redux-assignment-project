@@ -26,11 +26,10 @@ const RegisterForm = () => {
 
   const [onSubmit] = useFormSubmit({ handleSubmit, formSubmitType: "register" });
   const { loading, error, sessionId } = useAppSelector((state: RootState) => state.auth);
-  console.log(loading);
   return (
     <Box
       component="form"
-      sx={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "start", rowGap: "0.5rem" }}
+      sx={{ width: "50%", display: "flex", flexDirection: "column", justifyContent: "start", alignItems: "start", rowGap: "0.5rem" }}
       onSubmit={onSubmit}
     >
       <FormInputField
