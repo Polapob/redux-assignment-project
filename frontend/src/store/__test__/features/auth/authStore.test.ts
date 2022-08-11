@@ -58,15 +58,12 @@ describe("Auth store redux state test", () => {
     const { payload } = await store.dispatch(handleLoginPost(testBody));
     const { loading, error } = getAuthState();
 
-    expect(payload).toStrictEqual({
-      statusCode: 500,
-      error: "Network Error",
-      message: "Network Error",
-    });
+    expect(payload).toStrictEqual(mockReturnValue);
     expect({ loading, error }).toStrictEqual({
       loading: LoadingStatus.ERROR,
       error: mockReturnValue.error,
     });
+    console.log("state =", store.getState());
   });
 
   it("handle when user's email not found", async () => {
