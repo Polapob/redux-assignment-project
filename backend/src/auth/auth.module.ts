@@ -1,5 +1,4 @@
 import {
-  CacheModule,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -7,24 +6,14 @@ import {
 } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RedisCacheModule } from 'src/redis/redis.module';
-import { RedisCacheService } from 'src/redis/redis.service';
 import { AuthController } from './auth.controller';
 import { AuthMiddleware } from './auth.middleware';
 import { AuthRepository } from './auth.repository';
 import { AuthService } from './auth.service';
 
 @Module({
-  imports: [
-    JwtModule.register({ secret: process.env.JWT_SECRET }),
-    RedisCacheModule,
-    CacheModule.register({
-      isGlobal: true,
-      ttl: 5,
-      max: 100,
-    }),
-  ],
-  providers: [PrismaService, AuthRepository, RedisCacheService, AuthService],
+  imports: [JwtModule.register({ secret: process.env.JWT_SECRET })],
+  providers: [PrismaService, AuthRepository, AuthService],
   controllers: [AuthController],
 })
 export class AuthModule implements NestModule {

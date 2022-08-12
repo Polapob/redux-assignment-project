@@ -4,7 +4,6 @@ import { CreateUserDTO } from 'src/user/dto/createUser.dto';
 import { AuthRepository } from './auth.repository';
 import * as bcrypt from 'bcrypt';
 import { ObjectID } from 'bson';
-import { RedisCacheService } from 'src/redis/redis.service';
 import { UserLoginDTO } from './dto/userLogin.dto';
 import { EmailNotFoundException } from './exceptions/emailNotFound.exception';
 import { PasswordMismatchException } from './exceptions/passwordMismastch.exception';
@@ -12,12 +11,13 @@ import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import { UserAlreadyCreateException } from './exceptions/userAlreadyCreate.exception';
 import { now } from 'mongoose';
+import { createClient } from 'redis';
+import redisService from 'src/redis/redis.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private authRepository: AuthRepository,
-    private redisCacheService: RedisCacheService,
     private jwtService: JwtService,
   ) {}
 
@@ -53,29 +53,17 @@ export class AuthService {
       throw new PasswordMismatchException();
     }
     const sessionId = uuidv4();
-    await this.redisCacheService.set(sessionId, { id: fetchUser.id, email });
 
-    const getSessionData = await this.redisCacheService.get(sessionId);
-    console.log('data =', getSessionData);
+    await redisService.set(
+      sessionId,
+      JSON.stringify({ id: fetchUser.id, email }),
+    );
+
     return { sessionId };
   }
 
   async logout(sessionId: string): Promise<{ sessionId: string }> {
-    await this.redisCacheService.del(sessionId);
+    await redisService.del(sessionId);
     return { sessionId: '' };
-  }
-
-  async validate(
-    sessionId: string,
-  ): Promise<{ success: boolean; id: string; email: string }> {
-    const getSession = (await this.redisCacheService.get(sessionId)) as {
-      id: string;
-      email: string;
-    };
-    console.log('session =', getSession);
-    if (getSession.id) {
-      return { success: true, ...getSession };
-    }
-    return { success: false, ...getSession };
   }
 }

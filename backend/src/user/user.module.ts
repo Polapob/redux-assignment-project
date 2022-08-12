@@ -1,20 +1,13 @@
-import {
-  CacheModule,
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthMiddleware } from 'src/auth/auth.middleware';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RedisCacheModule } from 'src/redis/redis.module';
-import { RedisCacheService } from 'src/redis/redis.service';
 import { UserController } from './user.controller';
 import { UserRepository } from './user.repository';
 import { UserService } from './user.service';
 
 @Module({
-  imports: [RedisCacheModule, CacheModule.register({ ttl: 5, max: 10 })],
-  providers: [PrismaService, UserRepository, UserService, RedisCacheService],
+  imports: [],
+  providers: [PrismaService, UserRepository, UserService],
   controllers: [UserController],
   exports: [UserService],
 })

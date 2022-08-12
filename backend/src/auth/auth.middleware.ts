@@ -1,25 +1,24 @@
-import { Injectable, NestMiddleware, Next, Req } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, NextFunction } from 'express';
-import { RedisCacheService } from 'src/redis/redis.service';
+import { createClient } from 'redis';
+import redisService from 'src/redis/redis.service';
+import { IAuthRequest } from './auth.type';
 import { UserUnauthorizeException } from './exceptions/userUnauthorized.exception';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  constructor(private readonly redisCacheService: RedisCacheService) {}
-
-  async use(@Req() req: Request, @Next() next: NextFunction) {
+  async use(req: IAuthRequest, _: Response, next: NextFunction) {
     const { sessionId } = req.cookies;
-    const sessionData = (await this.redisCacheService.get(sessionId)) as {
+    const { id, email } = JSON.parse(await redisService.get(sessionId)) as {
       id: string;
       email: string;
     };
 
-    console.log('sessionData =', sessionData);
-
-    if (!sessionData || !sessionData.id || !sessionData.email) {
+    if (!id || !email) {
       throw new UserUnauthorizeException();
     }
-
+    req.userId = id;
+    req.userEmail = email;
     next();
   }
 }
