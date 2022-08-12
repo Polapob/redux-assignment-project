@@ -19,6 +19,7 @@ import { AuthService } from './auth.service';
     JwtModule.register({ secret: process.env.JWT_SECRET }),
     RedisCacheModule,
     CacheModule.register({
+      isGlobal: true,
       ttl: 5,
       max: 100,
     }),

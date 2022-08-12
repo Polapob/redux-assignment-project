@@ -14,6 +14,8 @@ export class AuthMiddleware implements NestMiddleware {
       email: string;
     };
 
+    console.log('sessionData =', sessionData);
+
     if (!sessionData || !sessionData.id || !sessionData.email) {
       throw new UserUnauthorizeException();
     }

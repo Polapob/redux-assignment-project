@@ -1,9 +1,9 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { ValidationPipe } from 'src/shared/pipes/validation.pipe';
 import { User } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { UserLoginDTO } from './dto/userLogin.dto';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { UserRegisterDTO } from './dto/userRegister.dto';
 
 @Controller('auth')
@@ -33,8 +33,13 @@ export class AuthController {
   }
 
   @Post('logout')
-  async logout(@Res() response: Response): Promise<void> {
+  async logout(
+    @Res() response: Response,
+    @Req() request: Request,
+  ): Promise<void> {
+    const { sessionId } = request.cookies;
     response.cookie('sessionId', '');
+    await this.authService.logout(sessionId);
     response.status(HttpStatus.ACCEPTED).json({
       sessionId: '',
     });

@@ -11,6 +11,7 @@ import { PasswordMismatchException } from './exceptions/passwordMismastch.except
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import { UserAlreadyCreateException } from './exceptions/userAlreadyCreate.exception';
+import { now } from 'mongoose';
 
 @Injectable()
 export class AuthService {
@@ -37,6 +38,7 @@ export class AuthService {
       nickName,
       role,
       password: hashPassword,
+      createdAt: now(),
     });
   }
 
@@ -52,21 +54,28 @@ export class AuthService {
     }
     const sessionId = uuidv4();
     await this.redisCacheService.set(sessionId, { id: fetchUser.id, email });
+
+    const getSessionData = await this.redisCacheService.get(sessionId);
+    console.log('data =', getSessionData);
     return { sessionId };
   }
 
-  async logout(): Promise<{ sessionId: string }> {
+  async logout(sessionId: string): Promise<{ sessionId: string }> {
+    await this.redisCacheService.del(sessionId);
     return { sessionId: '' };
   }
 
-  async validate(sessionId: string): Promise<boolean> {
+  async validate(
+    sessionId: string,
+  ): Promise<{ success: boolean; id: string; email: string }> {
     const getSession = (await this.redisCacheService.get(sessionId)) as {
       id: string;
       email: string;
     };
+    console.log('session =', getSession);
     if (getSession.id) {
-      return true;
+      return { success: true, ...getSession };
     }
-    return false;
+    return { success: false, ...getSession };
   }
 }

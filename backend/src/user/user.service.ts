@@ -5,6 +5,7 @@ import { UserRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
 import { ObjectId } from 'bson';
 import { UpdateUserDTO } from './dto/updateUser.dto';
+import { now } from 'mongoose';
 
 @Injectable()
 export class UserService {
@@ -31,6 +32,7 @@ export class UserService {
       id: new ObjectId().toString(),
       email,
       password: hashPassword,
+      createdAt: now(),
     });
   }
   async update(id: string, updateUserDTO: UpdateUserDTO): Promise<User> {
@@ -46,6 +48,7 @@ export class UserService {
       lastName: updateUserDTO.lastName || getUser.lastName,
       nickName: updateUserDTO.nickName || getUser.nickName,
       role: updateUserDTO.role || getUser.role,
+      createdAt: getUser.createdAt,
     });
   }
   async delete(id: string): Promise<void> {
