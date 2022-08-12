@@ -1,17 +1,36 @@
 import { Box, InputBase, Button, Typography, Stack } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { ChangeEventHandler, MouseEventHandler, useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, ChangeEventHandler, useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import StoreIcon from "/public/icons/StoreIcon.svg";
+import { debounce } from "lodash";
+import mockFilterSearchResult from "../../utils/components/SearchBar/mockFilterSearchResult";
+
+const MockSearchResult = ["book", "bird", "boy", "เครื่องเขียน", "หนังสือ", "rubber", "pencil"];
 
 const NavigationSearchBar = () => {
-  // const inputValue = useRef("");
   const [input, setInput] = useState<string>("");
-  const handleOnChange: ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
-    event.preventDefault();
-    // inputValue.current = event.target.value;
-    setInput(event.target.value);
-  }, []);
+  const [filterData, setFilterData] = useState<string[]>(MockSearchResult);
+  const debounceSearch = useRef(
+    debounce((event: ChangeEvent<HTMLInputElement>) => {
+      const filterInput = mockFilterSearchResult(event.target.value, MockSearchResult);
+      console.log("filterInput =", filterInput);
+      setFilterData(filterInput);
+    }, 300)
+  ).current;
+  const handleOnChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      event.preventDefault();
+      setInput(event.target.value);
+      debounceSearch(event);
+    },
+    [debounceSearch]
+  );
+
+  useEffect(() => {
+    return () => {
+      debounceSearch.cancel();
+    };
+  }, [debounceSearch]);
 
   return (
     <Box
@@ -56,16 +75,20 @@ const NavigationSearchBar = () => {
           }}
         >
           <Button sx={{ display: "flex", justifyContent: "start", alignItems: "center" }}>
-            <Image src={"/icons/StoreIcon.svg"} width="20px" height="20px" alt="picture not found" />
+            <Image src="/icons/StoreIcon.svg" width="20px" height="20px" alt="picture not found" />
             <Typography textAlign="left" sx={{ width: "100%", padding: "0rem 0.5rem", fontSize: "14px", textTransform: "none" }}>
-              Search "{input}" Shops
+              Search &quot;{input}&quot; Shops
             </Typography>
           </Button>
-          <Button>
-            <Typography textAlign="left" sx={{ width: "100%", padding: "0rem 0.5rem", fontSize: "14px", textTransform: "none" }}>
-              a
-            </Typography>
-          </Button>
+          {filterData.map((data, index) => {
+            return (
+              <Button key={index}>
+                <Typography textAlign="left" sx={{ width: "100%", padding: "0rem 0.5rem", fontSize: "14px", textTransform: "none" }}>
+                  {data}
+                </Typography>
+              </Button>
+            );
+          })}
         </Stack>
       )}
     </Box>
