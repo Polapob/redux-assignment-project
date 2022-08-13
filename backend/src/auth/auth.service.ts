@@ -11,13 +11,13 @@ import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import { UserAlreadyCreateException } from './exceptions/userAlreadyCreate.exception';
 import { now } from 'mongoose';
-import { createClient } from 'redis';
-import redisService from 'src/redis/redis.service';
+import { RedisCacheService } from 'src/redis/redis.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private authRepository: AuthRepository,
+    private redisCacheService: RedisCacheService,
     private jwtService: JwtService,
   ) {}
 
@@ -54,7 +54,7 @@ export class AuthService {
     }
     const sessionId = uuidv4();
 
-    await redisService.set(
+    await this.redisCacheService.set(
       sessionId,
       JSON.stringify({ id: fetchUser.id, email }),
     );
@@ -63,7 +63,7 @@ export class AuthService {
   }
 
   async logout(sessionId: string): Promise<{ sessionId: string }> {
-    await redisService.del(sessionId);
+    await this.redisCacheService.del(sessionId);
     return { sessionId: '' };
   }
 }

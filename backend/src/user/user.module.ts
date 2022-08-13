@@ -1,12 +1,13 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthMiddleware } from 'src/auth/auth.middleware';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { RedisModule } from 'src/redis/redis.module';
 import { UserController } from './user.controller';
 import { UserRepository } from './user.repository';
 import { UserService } from './user.service';
 
 @Module({
-  imports: [],
+  imports: [RedisModule],
   providers: [PrismaService, UserRepository, UserService],
   controllers: [UserController],
   exports: [UserService],
