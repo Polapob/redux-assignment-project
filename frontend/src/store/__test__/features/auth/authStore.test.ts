@@ -63,7 +63,6 @@ describe("Auth store redux state test", () => {
       loading: LoadingStatus.ERROR,
       error: mockReturnValue.error,
     });
-    console.log("state =", store.getState());
   });
 
   it("handle when user's email not found", async () => {

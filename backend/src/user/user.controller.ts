@@ -8,7 +8,7 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-import { Request } from 'express';
+
 import { User } from '@prisma/client';
 import { UserService } from './user.service';
 import { ValidationPipe } from '../shared/pipes/validation.pipe';
@@ -25,8 +25,6 @@ export class UserController {
     @Param('id') id: string,
     @Req() req: IAuthRequest,
   ): Promise<User> {
-    console.log('email =', req.userEmail);
-    console.log('id =', req.userId);
     return await this.userService.findOne(id);
   }
 

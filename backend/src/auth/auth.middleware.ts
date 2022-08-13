@@ -9,16 +9,19 @@ export class AuthMiddleware implements NestMiddleware {
   constructor(private redisCacheService: RedisCacheService) {}
   async use(req: IAuthRequest, _: Response, next: NextFunction) {
     const { sessionId } = req.cookies;
-    const { id, email } = JSON.parse(
-      await this.redisCacheService.get(sessionId),
-    ) as {
+
+    if (!sessionId) {
+      throw new UserUnauthorizeException();
+    }
+    const data = await this.redisCacheService.get(sessionId);
+    if (!data) {
+    }
+
+    const { id, email } = JSON.parse(data) as {
       id: string;
       email: string;
     };
 
-    if (!id || !email) {
-      throw new UserUnauthorizeException();
-    }
     req.userId = id;
     req.userEmail = email;
     next();

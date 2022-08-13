@@ -6,6 +6,7 @@ import { ObjectId } from 'bson';
 import { StoreNotFoundException } from './exceptions/storeNotFound.exception';
 import { UpdateStoreDTO } from './dto/updateStore.dto';
 import { NotHavePermissionException } from './exceptions/notHavePermission';
+import { Injectable } from '@nestjs/common';
 
 interface IStoreService {
   createOne(createBy: string, createStoreDTO: CreateStoreDTO): Promise<Store>;
@@ -17,7 +18,7 @@ interface IStoreService {
   ): Promise<Store>;
   delete(id: string, deleteBy: string): Promise<void>;
 }
-
+@Injectable()
 export class StoreService implements IStoreService {
   constructor(private readonly storeRepository: StoreRepository) {}
   async createOne(

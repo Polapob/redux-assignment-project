@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { Store } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -8,6 +9,7 @@ interface IStoreRepositoryInterface {
   get(id: string): Promise<Store>;
 }
 
+@Injectable()
 export class StoreRepository implements IStoreRepositoryInterface {
   constructor(private readonly prismaService: PrismaService) {}
 

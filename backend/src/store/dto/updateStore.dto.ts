@@ -1,9 +1,4 @@
-import {
-  IsString,
-  IsNotEmpty,
-  IsPhoneNumber,
-  IsMongoId,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsPhoneNumber } from 'class-validator';
 
 export class UpdateStoreDTO {
   @IsNotEmpty()

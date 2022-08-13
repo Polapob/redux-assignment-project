@@ -1,9 +1,4 @@
-import {
-  IsString,
-  IsNotEmpty,
-  IsPhoneNumber,
-  IsMongoId,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsPhoneNumber } from 'class-validator';
 
 export class CreateStoreDTO {
   @IsNotEmpty()
@@ -14,6 +9,5 @@ export class CreateStoreDTO {
   address: string;
   @IsNotEmpty()
   @IsString()
-  @IsPhoneNumber()
   phoneNumber: string;
 }
