@@ -7,7 +7,6 @@ import {
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RedisModule } from 'src/redis/redis.module';
-import { RedisCacheService } from 'src/redis/redis.service';
 import { AuthController } from './auth.controller';
 import { AuthMiddleware } from './auth.middleware';
 import { AuthRepository } from './auth.repository';

@@ -15,7 +15,7 @@ export class StoreRepository implements IStoreRepositoryInterface {
     return this.prismaService.store.create({ data: store });
   }
 
-  async update(id: string, store: Store): Promise<Store> {
+  async update(id: string, store: Omit<Store, 'id'>): Promise<Store> {
     return this.prismaService.store.update({
       where: {
         id,

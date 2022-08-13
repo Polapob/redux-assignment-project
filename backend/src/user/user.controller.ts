@@ -42,7 +42,7 @@ export class UserController {
     return await this.userService.delete(id);
   }
 
-  @Patch(':id')
+  @Patch('update')
   async update(
     @Param('id') id: string,
     @Body() userDTO: UpdateUserDTO,

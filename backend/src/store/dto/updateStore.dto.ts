@@ -5,7 +5,7 @@ import {
   IsMongoId,
 } from 'class-validator';
 
-export class CreateStoreDTO {
+export class UpdateStoreDTO {
   @IsNotEmpty()
   @IsString()
   name: string;
@@ -16,8 +16,4 @@ export class CreateStoreDTO {
   @IsString()
   @IsPhoneNumber()
   phoneNumber: string;
-  @IsNotEmpty()
-  @IsString()
-  @IsMongoId()
-  createBy: string;
 }

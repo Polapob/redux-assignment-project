@@ -16,8 +16,4 @@ export class CreateStoreDTO {
   @IsString()
   @IsPhoneNumber()
   phoneNumber: string;
-  @IsNotEmpty()
-  @IsString()
-  @IsMongoId()
-  createBy: string;
 }
