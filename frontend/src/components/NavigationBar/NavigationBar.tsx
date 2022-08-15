@@ -2,6 +2,7 @@ import { Box, Stack, Typography, InputBase, Button, Breadcrumbs } from "@mui/mat
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import NavigationSearchBar from "../SearchBar/NavigationSearchBar";
 import Link from "next/link";
+import NavbarBreadcrumb from "../Breadcrumb/NavbarBreadcrumb";
 const NavigationBar = () => {
   return (
     <Box
@@ -14,36 +15,12 @@ const NavigationBar = () => {
         backgroundColor: "#ee4d2d",
       }}
     >
-      <Breadcrumbs aria-label="breadcrumb" sx={{ paddingTop: "1rem", color: "white", fontWeight: "bold" }}>
-        <Link href="/register">
-          <Typography
-            sx={{
-              color: "white",
-              fontWeight: "bold",
-              ":hover": {
-                color: "rgba(255,255,255,0.8)",
-                cursor: "pointer",
-              },
-            }}
-          >
-            Sign Up
-          </Typography>
-        </Link>
-        <Link href="/login">
-          <Typography
-            sx={{
-              color: "white",
-              fontWeight: "bold",
-              ":hover": {
-                color: "rgba(255,255,255,0.8)",
-                cursor: "pointer",
-              },
-            }}
-          >
-            Login
-          </Typography>
-        </Link>
-      </Breadcrumbs>
+      <NavbarBreadcrumb
+        breadcrumbMetadata={[
+          { linkTo: "/register", text: "register" },
+          { linkTo: "/login", text: "login" },
+        ]}
+      />
       <Stack
         sx={{
           width: "100%",

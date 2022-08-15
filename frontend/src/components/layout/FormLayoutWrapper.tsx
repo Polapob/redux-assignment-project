@@ -18,8 +18,9 @@ const FormLayoutWrapper = ({ children }: IFormLayoutWrapperProps) => {
         justifyContent: "start",
         alignItems: "center",
       }}
+      data-testid="formlayout-container"
     >
-      <Box sx={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+      <Box sx={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} data-testid="formlayout-box">
         <NavigationBar />
         {children}
       </Box>
