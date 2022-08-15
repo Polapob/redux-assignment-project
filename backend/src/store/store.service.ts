@@ -25,7 +25,7 @@ export class StoreService implements IStoreService {
     createBy: string,
     createStoreDTO: CreateStoreDTO,
   ): Promise<Store> {
-    const { name, address, phoneNumber } = createStoreDTO;
+    const { name, address, phoneNumber, description } = createStoreDTO;
     return this.storeRepository.createOne({
       id: new ObjectId().toString(),
       name,
@@ -34,6 +34,7 @@ export class StoreService implements IStoreService {
       createBy,
       createdAt: now(),
       updatedAt: now(),
+      description,
     });
   }
   async get(id: string): Promise<Store> {
@@ -45,7 +46,7 @@ export class StoreService implements IStoreService {
     if (!!getStore) {
       throw new StoreNotFoundException();
     }
-    const { name, address, phoneNumber } = updateStoreDTO;
+    const { name, address, phoneNumber, description } = updateStoreDTO;
     if (updateBy != getStore.createBy) {
       throw new NotHavePermissionException();
     }
@@ -57,6 +58,7 @@ export class StoreService implements IStoreService {
       createBy: updateBy,
       createdAt: getStore.createdAt,
       updatedAt: now(),
+      description,
     });
   }
 

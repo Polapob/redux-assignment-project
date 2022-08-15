@@ -34,6 +34,7 @@ export class StoreController {
     @Req() request: IAuthRequest,
   ) {
     const { userId } = request;
+
     return await this.storeService.createOne(userId, createStoreDTO);
   }
 
@@ -54,11 +55,6 @@ export class StoreController {
     @Req() request: IAuthRequest,
   ) {
     const { userId } = request;
-    const { name, address, phoneNumber } = updateStoreDTO;
-    return await this.storeService.update(id, userId, {
-      name,
-      address,
-      phoneNumber,
-    });
+    return await this.storeService.update(id, userId, updateStoreDTO);
   }
 }

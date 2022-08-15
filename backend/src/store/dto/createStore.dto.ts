@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsPhoneNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateStoreDTO {
   @IsNotEmpty()
@@ -10,4 +10,7 @@ export class CreateStoreDTO {
   @IsNotEmpty()
   @IsString()
   phoneNumber: string;
+  @IsOptional()
+  @IsString()
+  description: string;
 }
