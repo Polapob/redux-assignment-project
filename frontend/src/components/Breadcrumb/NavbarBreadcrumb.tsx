@@ -17,7 +17,7 @@ const NavbarBreadcrumb = ({ breadcrumbMetadata }: IBreadcrumbProps) => {
         breadcrumbMetadata.map((data, index) => {
           const { text, linkTo } = data;
           return (
-            <Link href={linkTo} key={index}>
+            <Link href={linkTo} key={index} data-testid={`${text}-link`}>
               <Typography
                 sx={{
                   color: "white",
